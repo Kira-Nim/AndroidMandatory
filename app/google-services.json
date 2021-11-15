@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1059519456224",
+    "project_id": "symptomtracker-559ed",
+    "storage_bucket": "symptomtracker-559ed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1059519456224:android:aba825924cb648d25f8185",
+        "android_client_info": {
+          "package_name": "com.example.android_mandatory"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1059519456224-fffl4bosjbehvjchkl8mcur196b7d7ft.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIwBSs6FimqvtPjzDCCpmhAviSw1PnE_E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1059519456224-fffl4bosjbehvjchkl8mcur196b7d7ft.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1059519456224-huuct8om8uknsiljen5f6e91b9vhfo3b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "dk.symptomtracker.SymptomTracker"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
