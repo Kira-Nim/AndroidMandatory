@@ -12,19 +12,19 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.android_mandatory.databinding.FragmentHomeBinding;
+import com.example.android_mandatory.databinding.FragmentSymptomsBinding;
 
-public class HomeFragment extends Fragment {
+public class SymptomsFragment extends Fragment {
 
     private MainViewModel mainViewModel;
-    private FragmentHomeBinding binding;
+    private FragmentSymptomsBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         mainViewModel =
                 new ViewModelProvider(this).get(MainViewModel.class);
 
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        binding = FragmentSymptomsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         final TextView textView = binding.textHome;

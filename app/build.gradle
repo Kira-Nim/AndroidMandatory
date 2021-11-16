@@ -28,7 +28,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     buildFeatures {
+
+        // For every xml file there will be a viewBinding class available for binding the view to either a fragment or activity
+        // fx. for the "fragment_registration.xml" file a "FragmentRegistrationBinding" class will be available.
         viewBinding true
     }
 }
