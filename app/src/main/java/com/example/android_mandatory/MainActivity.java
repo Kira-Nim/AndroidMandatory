@@ -22,8 +22,8 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
-        // The line below means "deserialize the xml file that ActivityMainBinding is connected to using a "LayoutInflater (getLayoutInflater())"
-        // binding contains the deserialized xml from "activity_main.xml"
+        // The line below means "get an instance of ActivityMainBinder, by deserializing the xml file that ActivityMainBinding is connected to, using a "LayoutInflater (getLayoutInflater())"
+        // binding is an instance of ActivityMainBinder contains the deserialized xml from "activity_main.xml"
         // The deserialized xml file will be used below, to create a view.
         /*
         ActivityMainBinding
@@ -68,14 +68,17 @@ public class MainActivity extends AppCompatActivity {
                 R.id.navigation_registration, R.id.navigation_symptoms)
                 .build();
 
-        // Creates a controller that can be used by the OS to setup the ability for one or more given fragment views to replace each other in a given view.
+        // Creates a navigation controller that can be used by the OS to setup the ability for one
+        // or more given fragment views to replace each other in a given view.
         /*
             "NavController" and "Navigation" and "NavigationUI" are classes available in Android
              Navigation is primarily used to get access to a NavigationController instance.
 
              In activity_main.xml there is a fragment which has an id called: "@+id/nav_host_fragment_activity_main".
              ( android:id="@+id/nav_host_fragment_activity_main")
-             Because it starts with @+id/ the fragment can be identified and used when creating an NavigationController.
+             Because it starts with @+id/ the fragment can be identified and because it is
+             identified as a nav_host_fragment it can be used when creating an NavigationController.
+
              The "Navigation" class can be used to retrieve an NavigationController instance by passing
              an Activity and specifying what id in this activities xml files to look for.
 

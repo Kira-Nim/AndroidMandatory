@@ -18,3 +18,5 @@
         tools:layout="@layout/fragment_registration" />
 
 </navigation>
+
+<!--// This xml for my the apps navigation graph...-->
