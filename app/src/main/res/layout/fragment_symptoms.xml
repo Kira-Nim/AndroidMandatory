@@ -9,7 +9,7 @@
     tools:context=".ui.SymptomsFragment">
 
     <TextView
-        android:id="@+id/text_home"
+        android:id="@+id/text_symptom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

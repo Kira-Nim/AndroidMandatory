@@ -19,7 +19,7 @@ public class RegistrationFragment extends Fragment {
     // Used for getting access to db date which we will want to set an observer on.
     private MainViewModel mainViewModel;
 
-    // Used for
+    // Used to get the view for the RegistrationFragment
     private FragmentRegistrationBinding binding;
 
 

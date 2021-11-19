@@ -20,14 +20,22 @@ public class SymptomsFragment extends Fragment {
     private FragmentSymptomsBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        mainViewModel =
-                new ViewModelProvider(this).get(MainViewModel.class);
+                             ViewGroup container,
+                             Bundle savedInstanceState) {
 
+        // Get instance of ViewModel so that the data for the view can be accessible.
+        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+
+        // Get SymptomFragment's View hierarchy
         binding = FragmentSymptomsBinding.inflate(inflater, container, false);
+
+        // Get root-view
         View root = binding.getRoot();
 
-        final TextView textView = binding.textHome;
+        // Get other view in view-hierarchy
+        TextView textView = binding.textSymptom;
+
+        // set observer
         mainViewModel.getData().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
@@ -37,6 +45,7 @@ public class SymptomsFragment extends Fragment {
         return root;
     }
 
+    // Run when the fragments lifecycle ends
     @Override
     public void onDestroyView() {
         super.onDestroyView();
