@@ -12,7 +12,11 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.android_mandatory.Model.MainViewModel;
+import com.example.android_mandatory.Model.Symptom;
 import com.example.android_mandatory.databinding.FragmentRegistrationBinding;
+
+import java.util.ArrayList;
 
 public class RegistrationFragment extends Fragment {
 
@@ -76,10 +80,10 @@ public class RegistrationFragment extends Fragment {
             The LifecycleOwner instance is parsed as param to the observer because it is needed to
             keep track of when the observation should stop (if the Fragment is garbage collected ex.)
          */
-        mainViewModel.getData().observe(getViewLifecycleOwner(), new Observer<String>() {
+        mainViewModel.getData().observe(getViewLifecycleOwner(), new Observer<ArrayList<Symptom>>() {
             @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
+            public void onChanged(@Nullable ArrayList<Symptom> sy) {
+                textView.setText(sy.toString());
             }
         });
         return root;

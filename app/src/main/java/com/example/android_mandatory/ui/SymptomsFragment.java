@@ -4,18 +4,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.android_mandatory.MainActivity;
+import com.example.android_mandatory.Model.MainViewModel;
+import com.example.android_mandatory.Model.Symptom;
 import com.example.android_mandatory.databinding.FragmentSymptomsBinding;
 
 import java.util.ArrayList;
@@ -105,9 +104,9 @@ public class SymptomsFragment extends Fragment {
         symptomRecyclerView.setLayoutManager(linearLayoutManager);
 
         // set observer
-        mainViewModel.getData().observe(getViewLifecycleOwner(), new Observer<String>() {
+        mainViewModel.getData().observe(getViewLifecycleOwner(), new Observer<ArrayList<Symptom>>() {
             @Override
-            public void onChanged(@Nullable String s) {
+            public void onChanged(@Nullable ArrayList<Symptom> s) {
 
                 // What happens when db model data changes here!
             }
