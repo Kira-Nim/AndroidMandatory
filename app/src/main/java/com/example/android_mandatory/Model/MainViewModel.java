@@ -125,4 +125,9 @@ public class MainViewModel extends ViewModel {
         db.collection("symptoms").document(docId).delete();
     }
 
+    public void updateSymptom(Symptom symptom){
+
+        // .collection("notes").document(documentID).set(noteToStore);
+    }
+
 }

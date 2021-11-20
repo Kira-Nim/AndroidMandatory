@@ -4,6 +4,7 @@ package com.example.android_mandatory.ui;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +19,8 @@ import java.util.List;
 public class SymptomAdapter extends RecyclerView.Adapter<SymptomAdapter.ViewHolder>  {
 
     private List<Symptom> localDataSet;
+    private SymptomsFragment.ItemClickListener itemClickListener;
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -37,10 +40,18 @@ public class SymptomAdapter extends RecyclerView.Adapter<SymptomAdapter.ViewHold
     }
 
     // Constructor for our (outer) class that takes the model data to be shown as param.
-    public SymptomAdapter(List<Symptom> dataSet) {
+    public SymptomAdapter(List<Symptom> dataSet, SymptomsFragment.ItemClickListener itemClickListener) {
 
         // Data from db to be shown in table
         localDataSet = dataSet;
+
+        /*
+            This itemClickListener att contains the param which is an instance of an anonymously implemented interface.
+            It contains logic about what should happen when item in table is clicked and
+            encapsulated data to handle this event.
+         */
+        this.itemClickListener = itemClickListener;
+
     }
 
     // Create new ViewHolders incl. views (as many as can be shown on screen) - invoked by the layout manager
@@ -52,7 +63,12 @@ public class SymptomAdapter extends RecyclerView.Adapter<SymptomAdapter.ViewHold
         // We could possibly have used a binding insted of this way here (look in MainActivity)...
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.symptom_row_item, viewGroup, false);
 
-        return new ViewHolder(view);
+        ViewHolder newViewHolder = new ViewHolder(view);
+
+        // Register functionality for an oncklicevent on an item in symptom list in ui.
+        view.setOnClickListener(viewPassedByOnClickListener -> itemClickListener.onItemClick(viewPassedByOnClickListener, newViewHolder.getAdapterPosition()));
+
+        return newViewHolder;
     }
 
     // Replace the contents of a view (in a viewHolder) - invoked by the layout manager
