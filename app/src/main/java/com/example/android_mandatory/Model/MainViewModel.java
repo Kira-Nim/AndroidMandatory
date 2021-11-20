@@ -27,15 +27,15 @@ public class MainViewModel extends ViewModel {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    // List containing data for symptoms collection in db
+    private final ArrayList<Symptom> symptomList = new ArrayList<Symptom>();
+
     // This MutableLiveData wrapper class makes it possible to observe data and react to changes to it.
     /*
         It will be possible to set "observers", that are connected to this instance, other places,
         which will be notified when changes to this instance occurs.
      */
-    private MutableLiveData<ArrayList<Symptom>> mutableLiveDataWrapper = new MutableLiveData<>();
-
-    // List containing data for symptoms collection in db
-    private final ArrayList<Symptom> symptomList = new ArrayList<Symptom>();
+    private MutableLiveData<ArrayList<Symptom>> mutableLiveDataWrapper = new MutableLiveData<>(symptomList);
 
 
     // Constructor:
@@ -45,6 +45,9 @@ public class MainViewModel extends ViewModel {
         Wrap the arraylist in a MutableLiveData wrapper.
      */
     public MainViewModel() {
+
+        // Wrap the symptomList in the mutableLiveData Wrapper created above.
+        mutableLiveDataWrapper.setValue(symptomList);
 
         // Add an Listener on the collection in db
         db.collection("symptoms")
@@ -97,10 +100,8 @@ public class MainViewModel extends ViewModel {
                                 System.out.println("Succes getting collection data");
                             }
 
-            // TEMP.. Just testing the symptomList until it is set up to be shown in view
-                            for(Symptom currentElement: symptomList){
-                                System.out.println("Element in symptomList: " + currentElement.getName());
-                            }
+                            // Wrap the symptomList in the mutableLiveData Wrapper created above.
+                            mutableLiveDataWrapper.setValue(symptomList);
 
                         } else {
                             // Print status for getting data in console
@@ -108,12 +109,6 @@ public class MainViewModel extends ViewModel {
                         }
                     }
                 });
-
-
-
-        // Wrap the symptomList in the mutableLiveData Wrapper created above.
-        mutableLiveDataWrapper.setValue(symptomList);
-
     }
 
     // Make the arraylist wrapped in the mutableLiveData accessible through a get method.
@@ -124,6 +119,10 @@ public class MainViewModel extends ViewModel {
      */
     public LiveData<ArrayList<Symptom>> getData() {
         return mutableLiveDataWrapper;
+    }
+
+    public void deleteDocument(String docId){
+        db.collection("symptoms").document(docId).delete();
     }
 
 }

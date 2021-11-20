@@ -56,4 +56,7 @@ dependencies {
 
     // From dependency library: https://firebase.google.com/docs/android/setup#available-libraries
     implementation 'com.google.firebase:firebase-firestore'
+
+    // Background for delete row
+    implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.3'
 }

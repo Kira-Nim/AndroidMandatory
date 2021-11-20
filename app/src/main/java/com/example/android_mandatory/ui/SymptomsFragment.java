@@ -1,29 +1,37 @@
 package com.example.android_mandatory.ui;
 
+import android.content.Intent;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.android_mandatory.Model.MainViewModel;
 import com.example.android_mandatory.Model.Symptom;
+import com.example.android_mandatory.R;
 import com.example.android_mandatory.databinding.FragmentSymptomsBinding;
-
 import java.util.ArrayList;
-import java.util.List;
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
-public class SymptomsFragment extends Fragment {
+
+
+public class SymptomsFragment extends Fragment{
 
     private MainViewModel mainViewModel;
     private FragmentSymptomsBinding binding;
+    private ArrayList<Symptom> symptomList;
+    private SymptomAdapter symptomAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container,
@@ -59,15 +67,8 @@ public class SymptomsFragment extends Fragment {
          */
         RecyclerView symptomRecyclerView = binding.symptomRecyclerView;
 
-        // Temp data
-        List<String> myList = new ArrayList<String>();
-        myList.add("Hello");
-        myList.add("world");
-        myList.add("From");
-        myList.add("Martin");
-        myList.add("And");
-        myList.add("Kira");
-
+        // Get data data and store it in symptomList
+        symptomList = mainViewModel.getData().getValue();
 
         // Create instance of Adapter
         /*
@@ -76,7 +77,7 @@ public class SymptomsFragment extends Fragment {
            It will also be used to bind data to the views in the viewHolders when a given view
            element is going to be shown on screen.
          */
-        SymptomAdapter symptomAdapter = new SymptomAdapter(myList);
+        symptomAdapter = new SymptomAdapter(symptomList);
 
         // Set an adapter on symptomRecyclerView
         /*
@@ -105,14 +106,75 @@ public class SymptomsFragment extends Fragment {
 
         // set observer
         mainViewModel.getData().observe(getViewLifecycleOwner(), new Observer<ArrayList<Symptom>>() {
+
             @Override
             public void onChanged(@Nullable ArrayList<Symptom> s) {
 
-                // What happens when db model data changes here!
+                // This is not stricly nessasery as s and symptomList holds a reference to the same Arraylist<Symptom>
+                symptomAdapter.setItems(s);
+
+                // update symptomList to carry a reference to the same list in memory af the
+                // given to the adapter/shown in view
+                symptomList = s;
+
+                // Notify the adapter that the data inside the mutableLiveDataWrapper has changed
+                // and has to be updated.
+                symptomAdapter.notifyDataSetChanged();
+
             }
+
         });
+
+
+
+
+
+
+
+
+
+
+        // Create an ItemTouchHelper and attach it to the recyclerView
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(symptomRecyclerView);
+
         return root;
     }
+
+    // Callback for when a swipe is detected
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+            int position = viewHolder.getAdapterPosition();
+
+            if(ItemTouchHelper.LEFT == direction){
+                String itemId = symptomList.get(position).getId();
+                symptomList.remove(position);
+                mainViewModel.deleteDocument(itemId);
+                symptomAdapter.notifyItemRemoved(position);
+                symptomAdapter.notifyItemRangeChanged(position, symptomAdapter.getItemCount());
+            }
+        }
+
+        @Override
+        public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+
+            new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(getActivity(), R.color.design_default_color_error))
+                    .addSwipeLeftActionIcon(R.drawable.ic_baseline_delete_forever_24)
+                    .create()
+                    .decorate();
+
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        }
+    };
 
     // Run when the fragments lifecycle ends
     @Override
@@ -121,3 +183,6 @@ public class SymptomsFragment extends Fragment {
         binding = null;
     }
 }
+
+
+// Delete resource: https://www.youtube.com/watch?v=rcSNkSJ624U
