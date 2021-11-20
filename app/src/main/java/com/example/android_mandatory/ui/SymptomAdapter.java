@@ -19,7 +19,7 @@ public class SymptomAdapter extends RecyclerView.Adapter<SymptomAdapter.ViewHold
 
     private List<Symptom> localDataSet;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView textView;
 
@@ -75,9 +75,5 @@ public class SymptomAdapter extends RecyclerView.Adapter<SymptomAdapter.ViewHold
         this.localDataSet = newList;
     }
 
-    @Override
-    public void onClick(View view) {
-        clickListener.onClick(view, getPosition()); // call the onClick in the OnItemClickListener
-    }
 
 }
