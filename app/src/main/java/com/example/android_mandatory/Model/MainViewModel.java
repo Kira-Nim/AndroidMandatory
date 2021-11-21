@@ -78,21 +78,25 @@ public class MainViewModel extends ViewModel {
                                 // Get data from field "registration" in current symptom document.
                                 List<Map<String, Object>> dbRegistrationMapList = (List<Map<String, Object>>)document.get("registrations");
 
-                                // Iterate through list of maps and create an registration instance for each map in list
-                                for(Map<String, Object> regMap:dbRegistrationMapList){
 
-                                    long intensity = (long) regMap.get("intensity");
+                                if(dbRegistrationMapList != null) {
 
-                                    Timestamp tempDate = (Timestamp)regMap.get("date");
-                                    Date date = tempDate.toDate();
+                                    // Iterate through list of maps and create an registration instance for each map in list
+                                    for (Map<String, Object> regMap : dbRegistrationMapList) {
 
-                                    // Create instance of Registration and set attribute values
-                                    Registration registration = new Registration();
-                                    registration.setRegistrationDate(date);
-                                    registration.setIntensity(intensity);
+                                        long intensity = (long) regMap.get("intensity");
 
-                                    // Add new registration to registrations list on current symptom
-                                    symptom.getRegistrations().add(registration);
+                                        Timestamp tempDate = (Timestamp) regMap.get("date");
+                                        Date date = tempDate.toDate();
+
+                                        // Create instance of Registration and set attribute values
+                                        Registration registration = new Registration();
+                                        registration.setRegistrationDate(date);
+                                        registration.setIntensity(intensity);
+
+                                        // Add new registration to registrations list on current symptom
+                                        symptom.getRegistrations().add(registration);
+                                    }
                                 }
 
                                 // Add symptom to list of all symptoms in collection list
@@ -138,7 +142,7 @@ public class MainViewModel extends ViewModel {
         data.put("name", symptom.getName());
 
         db.collection("symptoms").add(data);
-        
+
     }
 
 }

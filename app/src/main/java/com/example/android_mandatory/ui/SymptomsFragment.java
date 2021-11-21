@@ -226,7 +226,8 @@ public class SymptomsFragment extends Fragment{
                         }else{
                             for (Symptom symptom : symptomList) {
 
-                                if(symptom.getId().equals(id)){
+                                String currentSymptomId = symptom.getId();
+                                if(currentSymptomId!= null && currentSymptomId.equals(id)){
                                     symptom.setName(symptomName);
                                     mainViewModel.updateSymptom(symptom);
                                     symptomAdapter.notifyDataSetChanged();
@@ -252,9 +253,13 @@ public class SymptomsFragment extends Fragment{
             int position = viewHolder.getAdapterPosition();
 
             if(ItemTouchHelper.LEFT == direction){
-                String itemId = symptomList.get(position).getId();
+                Symptom symptom = symptomList.get(position);
                 symptomList.remove(position);
-                mainViewModel.deleteDocument(itemId);
+
+                if(symptom.getId() != null){
+                    mainViewModel.deleteDocument(symptom.getId());
+                }
+
                 symptomAdapter.notifyItemRemoved(position);
                 symptomAdapter.notifyItemRangeChanged(position, symptomAdapter.getItemCount());
             }
