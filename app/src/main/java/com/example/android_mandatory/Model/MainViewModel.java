@@ -16,9 +16,11 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -127,7 +129,16 @@ public class MainViewModel extends ViewModel {
 
     public void updateSymptom(Symptom symptom){
 
-        // .collection("notes").document(documentID).set(noteToStore);
+         db.collection("symptoms").document(symptom.getId()).update("name",symptom.getName());
+    }
+
+    public void createSymptom(Symptom symptom){
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("name", symptom.getName());
+
+        db.collection("symptoms").add(data);
+        
     }
 
 }

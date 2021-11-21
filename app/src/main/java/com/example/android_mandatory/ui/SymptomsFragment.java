@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -22,19 +22,19 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.android_mandatory.MainActivity;
 import com.example.android_mandatory.Model.MainViewModel;
 import com.example.android_mandatory.Model.Symptom;
 import com.example.android_mandatory.R;
 import com.example.android_mandatory.databinding.FragmentSymptomsBinding;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 
 public class SymptomsFragment extends Fragment{
 
-    public final String EXTRA_MESSAGE_KEY_CLICKED_ITEM_ID = "com.example.android_mandatory.SymptomFragment.id";
+    public static final String EXTRA_MESSAGE_KEY_CLICKED_ITEM_ID = "com.example.android_mandatory.SymptomFragment.id";
     public static final String EXTRA_MESSAGE_KEY_ITEM_TEXT = "com.example.android_mandatory.SymptomFragment.text";
 
     private MainViewModel mainViewModel;
@@ -42,9 +42,7 @@ public class SymptomsFragment extends Fragment{
     private ArrayList<Symptom> symptomList;
     private SymptomAdapter symptomAdapter;
 
-
-    // Create an interface inside this class
-    // Below we make an anonymous implementation of this interface.
+    // Create an interface inside this class. Below we make an anonymous implementation of this interface.
     /*
         It is necessary to make this interface because the setOnClickListener() that is used
         to register the event on the view (to be shown in table row), which is set inside the
@@ -53,56 +51,6 @@ public class SymptomsFragment extends Fragment{
     public interface ItemClickListener {
         void onItemClick(View view, int position);
     }
-
-    /*
-        AdapterView.OnItemClickListener is the name of an interface.
-        This interface is implemented by making an anonymous implementation of the required onItemClick method.
-     */
-    private ItemClickListener itemClickListener = new ItemClickListener() {
-
-                @Override
-                public void onItemClick(View view, final int position) {
-
-                    Symptom clickedSymptom = symptomList.get(position);
-
-                    String symptomText = clickedSymptom.getName();
-                    String symptomId = clickedSymptom.getId();
-
-                    Intent intent = new Intent (getActivity(), EditSymptomActivity.class);
-
-                    intent.putExtra(EXTRA_MESSAGE_KEY_CLICKED_ITEM_ID, symptomId);
-                    intent.putExtra(EXTRA_MESSAGE_KEY_ITEM_TEXT, symptomText);
-
-                    editActivityLauncher.launch(intent);
-                }
-            };
-
-
-
-
-    // Get an ActivityResultLauncher instance that will have an attribute with a callback
-    // which will be run when a return intent is received from the edit view - when "gem" is pressed in the edit symptom UI
-    private ActivityResultLauncher<Intent> editActivityLauncher = registerForActivityResult(
-                                 new ActivityResultContracts.StartActivityForResult(),
-                                 new ActivityResultCallback<ActivityResult>() {
-
-                @Override
-                public void onActivityResult(ActivityResult result) {
-
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        Intent intent = result.getData();
-
-                        // Handle the Intent
-
-                        //mainViewModel.updateSymptom(editedSymptom);
-
-                    }
-                }
-            });
-
-
-
-
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -197,13 +145,9 @@ public class SymptomsFragment extends Fragment{
 
         });
 
-
-
-
-
-
-
-
+        // Register functionality for an oncklicevent on an button in symptom list in ui.
+        FloatingActionButton buttonView = binding.floatingActionButton4;
+        buttonView.setOnClickListener(buttonClickListener);
 
 
         // Create an ItemTouchHelper and attach it to the recyclerView
@@ -211,9 +155,90 @@ public class SymptomsFragment extends Fragment{
         itemTouchHelper.attachToRecyclerView(symptomRecyclerView);
 
         return root;
+
     }
 
-    // Callback for when a swipe is detected
+    // Click listener for items in symptom table.
+    /*
+    AdapterView.OnItemClickListener is the name of an interface.
+    This interface is implemented by making an anonymous implementation of the required onItemClick method.
+ */
+    private ItemClickListener itemClickListener = new ItemClickListener() {
+
+        @Override
+        public void onItemClick(View view, final int position) {
+
+            Symptom clickedSymptom = symptomList.get(position);
+
+            String symptomText = clickedSymptom.getName();
+            String symptomId = clickedSymptom.getId();
+
+            Intent intent = new Intent (getActivity(), EditSymptomActivity.class);
+
+            intent.putExtra(EXTRA_MESSAGE_KEY_CLICKED_ITEM_ID, symptomId);
+            intent.putExtra(EXTRA_MESSAGE_KEY_ITEM_TEXT, symptomText);
+
+            editActivityLauncher.launch(intent);
+        }
+    };
+
+
+    // Click listener for createButton in on SymptomFragment page.
+    private View.OnClickListener buttonClickListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View view) {
+
+            String symptomText = "Symptom navn";
+            String symptomId = "new activity";
+
+            Intent intent = new Intent (getActivity(), EditSymptomActivity.class);
+
+            intent.putExtra(EXTRA_MESSAGE_KEY_CLICKED_ITEM_ID, symptomId);
+            intent.putExtra(EXTRA_MESSAGE_KEY_ITEM_TEXT, symptomText);
+
+            editActivityLauncher.launch(intent);
+        }
+    };
+
+
+    // Get an ActivityResultLauncher instance that will have an attribute with a callback
+    // which will be run when a return intent is received from the edit view.
+    private ActivityResultLauncher<Intent> editActivityLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+
+                @Override
+                public void onActivityResult(ActivityResult result) {
+
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent intent = result.getData();
+
+                        String id = intent.getStringExtra(EditSymptomActivity.EXTRA_MESSAGE_KEY_CLICKED_ITEM_ID);
+                        String symptomName = intent.getStringExtra(EditSymptomActivity.EXTRA_MESSAGE_KEY_CLICKED_ITEM_TEXT);
+
+                        if(id.equals("new activity")){
+                            Symptom newSymptom = new Symptom();
+                            newSymptom.setName(symptomName);
+                            mainViewModel.createSymptom(newSymptom);
+                            symptomList.add(newSymptom);
+                            symptomAdapter.notifyDataSetChanged();
+                        }else{
+                            for (Symptom symptom : symptomList) {
+
+                                if(symptom.getId().equals(id)){
+                                    symptom.setName(symptomName);
+                                    mainViewModel.updateSymptom(symptom);
+                                    symptomAdapter.notifyDataSetChanged();
+
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+    // Callback for when a swipe on a item in table is detected
     ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
         @Override
@@ -247,6 +272,7 @@ public class SymptomsFragment extends Fragment{
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         }
     };
+
 
     // Run when the fragments lifecycle ends
     @Override
